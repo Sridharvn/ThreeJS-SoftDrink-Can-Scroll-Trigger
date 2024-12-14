@@ -88,12 +88,17 @@ section {
   text-align: center;
 }
 
-.scan-info {
+.product-id {
   position: absolute;
+  /* top: 1em; */
+  left: 2em;
+}
+.scan-info {
+  /* position: absolute; */
   top: 0;
   width: 100vw;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 2em;
 }
 
