@@ -76,9 +76,23 @@ loader.load("./assets/josta.glb", function (gltf) {
     const maxDim = Math.max(size.x, size.y, size.z);
     camera.position.z = maxDim * 1.5;
 
-    model.scale.set(0, 0, 0);
+    // model.scale.set(0, 0, 0);
     playInitialAnimation();
 
     cancelAnimationFrame(basicAnimate);
     animate()
 })
+
+const floatAmplitude = 0.2;
+const floatSpeed = 1.5;
+const rotationSpeed = 0.3;
+let isFloating = true;
+let currentScroll = 0;
+
+
+const stickyHeight = window.innerHeight;
+const scannerSection = document.querySelector(".scanner");
+const scannerPosition = scannerSection.offsetTop;
+const scanContainer = document.querySelector(".scan-container");
+const scanSound = new Audio("./assets/store-scanner-beep-90395.mp3");
+gsap.set(scanContainer, { scale: 0 });
