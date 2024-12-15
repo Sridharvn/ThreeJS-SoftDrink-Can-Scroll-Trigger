@@ -120,7 +120,7 @@ ScrollTrigger.create({
     end: "top -10",
     onEnterBack: () => {
         if (model) {
-            gsap.tp(model.scale, {
+            gsap.to(model.scale, {
                 x: 1,
                 y: 1,
                 z: 1,
