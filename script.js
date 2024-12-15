@@ -96,3 +96,112 @@ const scannerPosition = scannerSection.offsetTop;
 const scanContainer = document.querySelector(".scan-container");
 const scanSound = new Audio("./assets/store-scanner-beep-90395.mp3");
 gsap.set(scanContainer, { scale: 0 });
+
+function playInitialAnimation() {
+    if (model) {
+        gsap.to(model.scale, {
+            x: 1,
+            y: 1,
+            z: 1,
+            duration: 1,
+            ease: "power2.out"
+        })
+    }
+    gsap.to(scanContainer, {
+        scale: 1,
+        duration: 1,
+        ease: "power2.out"
+    })
+}
+
+ScrollTrigger.create({
+    trigger: 'body',
+    start: "top top",
+    end: "top -10",
+    onEnterBack: () => {
+        if (model) {
+            gsap.tp(model.scale, {
+                x: 1,
+                y: 1,
+                z: 1,
+                duration: 1,
+                ease: "power2.out"
+            })
+            isFloating = true;
+        }
+        gsap.to(scanContainer, {
+            scale: 1,
+            duration: 1,
+            ease: "power2.out"
+        })
+    }
+})
+
+ScrollTrigger.create({
+    trigger: ".scanner",
+    start: "top top",
+    end: `${stickyHeight}px`,
+    pin: true,
+    onEnter: () => {
+        if (model) {
+            isFloating = false;
+            model.position.y = 0;
+            setTimeout(() => {
+                scanSound.currentTime = 0;
+                scanSound.play();
+            }, 500);
+            gsap.to(model.rotation, {
+                y: model.rotation.y + Math.PI * 2,
+                duration: 1,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    gsap.to(model.scale, {
+                        x: 0,
+                        y: 0,
+                        z: 0,
+                        duration: 0.5,
+                        ease: "power2.in",
+                        onComplete: () => {
+                            gsap.to(scanContainer, {
+                                scale: 0,
+                                duration: 0.5,
+                                ease: "power2.in"
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    },
+    onLeaveBack: () => {
+        gsap.set(scanContainer, { scale: 0 });
+        gsap.to(scanContainer, {
+            scale: 1,
+            duration: 1,
+            ease: "power2.out"
+        })
+    }
+})
+
+lenis.on("scroll", e => {
+    currentScroll = e.scroll
+})
+
+function animate() {
+    if (model) {
+        if (isFloating) {
+            const floatOffset = Math.sin(Date.now() * 0.001 * floatSpeed) * floatAmplitude;
+            model.position.y = floatOffset;
+        }
+        const scrollProgress = Math.min(currentScroll / scannerPosition, 1)
+
+        if (scrollProgress < 1) {
+            model.rotation.x = scrollProgress * Math.PI * 2;
+        }
+        if (scrollProgress < 1) {
+            model.rotation.y += 0.001 * rotationSpeed;
+        }
+    }
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate)
+}
