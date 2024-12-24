@@ -38,13 +38,13 @@ const mainLight = new THREE.DirectionalLight(0xffffff, 1);
 mainLight.position.set(5, 10, 7.5);
 scene.add(mainLight);
 
-const fillLight = new THREE.DirectionalLight(0xffffff, 3);
-fillLight.position.set(-5, 0, 5);
-scene.add(fillLight);
+// const fillLight = new THREE.DirectionalLight(0xffffff, 3);
+// fillLight.position.set(-5, 0, 5);
+// scene.add(fillLight);
 
-const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 2);
-hemiLight.position.set(0, 25, 0);
-scene.add(hemiLight);
+// const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 2);
+// hemiLight.position.set(0, 25, 0);
+// scene.add(hemiLight);
 
 function basicAnimate() {
     renderer.render(scene, camera);
@@ -54,13 +54,13 @@ basicAnimate();
 
 let model;
 const loader = new THREE.GLTFLoader();
-loader.load("./assets/josta.glb", function (gltf) {
+loader.load("./assets/simple_cola_can.glb", function (gltf) {
     model = gltf.scene;
     model.traverse((node) => {
         if (node.isMesh) {
             if (node.material) {
-                node.material.metalness = 0.3;
-                node.material.roughness = 0.4;
+                node.material.metalness = 1;
+                node.material.roughness = 0.7;
                 node.material.envMapIntensity = 1.5;
             }
             node.castShadow = true;
